@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: devops-training
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: petstore-api
+        image: ghcr.io/turtlejrp/devops-java-example:44e2e157909563b78c52f7cc2ebbe76c890df5d0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9090
+        env:
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: api.service.port
